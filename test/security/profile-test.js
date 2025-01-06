@@ -1,40 +1,40 @@
-var config = require("../../config/config");
-var assert = require("assert");
-var should = require("should");
-var async = require("async");
-var By = require("selenium-webdriver").By;
-var chromeDriver = require("chromedriver");
+const config = require("../../config/config");
+const assert = require("assert");
+const should = require("should");
+const async = require("async");
+const By = require("selenium-webdriver").By;
+const chromeDriver = require("chromedriver");
 
 // Documentation for the selenium JS webdriver: https://code.google.com/p/selenium/wiki/WebDriverJs
-var seleniumWebdriver = require("selenium-webdriver");
+const seleniumWebdriver = require("selenium-webdriver");
 var webDriver;
-var chrome = require("selenium-webdriver/chrome");
-var test = require("selenium-webdriver/testing");
-var proxy = require("selenium-webdriver/proxy");
-var path = chromeDriver.path;
-var service = new chrome.ServiceBuilder(path).build();
+const chrome = require("selenium-webdriver/chrome");
+const test = require("selenium-webdriver/testing");
+const proxy = require("selenium-webdriver/proxy");
+const path = chromeDriver.path;
+const service = new chrome.ServiceBuilder(path).build();
 
 // SUT is an acronym for System Under Test.
-var sutProtocol = "http://";
-var zapTargetApp = sutProtocol + config.hostName + ":" + config.port + "/";
-var zapOptions = {
+const sutProtocol = "http://";
+const zapTargetApp = sutProtocol + config.hostName + ":" + config.port + "/";
+const zapOptions = {
     proxy: (sutProtocol + config.zapHostName + ":" + config.zapPort + "/"),
     targetApp: zapTargetApp
 };
-var ZapClient = require("zaproxy");
-var zaproxy = new ZapClient(zapOptions);
-var zapTargetAppRoute = "profile";
-var zapTargetAppAndRoute = zapTargetApp + zapTargetAppRoute;
-var zapApiKey = config.zapApiKey;
-var fs = require("fs");
+const ZapClient = require("zaproxy");
+const zaproxy = new ZapClient(zapOptions);
+const zapTargetAppRoute = "profile";
+const zapTargetAppAndRoute = zapTargetApp + zapTargetAppRoute;
+const zapApiKey = config.zapApiKey;
+const fs = require("fs");
 
-var state = {
+const state = {
     description: "",
     error: null
 };
 
-var sutUserName = "user1";
-var sutUserPassword = "User1_123";
+const sutUserName = "user1";
+const sutUserPassword = "User1_123";
 
 chrome.setDefaultService(service);
 
@@ -81,7 +81,7 @@ test.before(function() {
 });
 test.after(function() {
     "use strict";
-    var overWrite = true;
+    let overWrite = true;
     this.timeout(10000);
     webDriver.quit();
     zaproxy.core.newSession("new NodeGoat session", overWrite, zapApiKey, function() {});
@@ -98,15 +98,15 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
     // http://www.vapidspace.com/coding/2014/02/08/automating-selenium-tests-with-grunt-and-mocha/
     // http://bites.goodeggs.com/posts/selenium-webdriver-nodejs-tutorial/
     test.it("Should not exceed the decided threshold of vulnerabilities known to Zap", function(done) {
-        var contextId = 1;
+        const contextId = 1;
         var userId;
-        var maxChildren = 1;
-        var alertThreshold = 3;
-        var numberOfAlerts;
-        var scanId;
-        var zapInProgressIntervalId;
+        const maxChildren = 1;
+        const alertThreshold = 3;
+        const numberOfAlerts;
+        const scanId;
+        const zapInProgressIntervalId;
         // Todo: Let's do something with resultsFromAllAsyncSeriesFunctions.
-        var onCompletion = function(error, resultsFromAllAsyncSeriesFunctions) {
+        const onCompletion = function(error, resultsFromAllAsyncSeriesFunctions) {
             if (!error)
                 console.log(
                     resultsFromAllAsyncSeriesFunctions[resultsFromAllAsyncSeriesFunctions.length - 1].description
@@ -169,7 +169,7 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
                 );
             },
             function setForcedUserModeEnabled(setForcedUserModeEnabledDone) {
-                var enabled = true;
+                const enabled = true;
                 zaproxy.forcedUser.setForcedUserModeEnabled(enabled, zapApiKey, function(err, resp) {
                     setForcedUserModeEnabledDone(state.error);
                 });
@@ -197,7 +197,7 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
                 );
             },
             function setUserEnabled(setUserEnabledDone) { // User should already be enabled?
-                var enabled = true;
+                const enabled = true;
                 zaproxy.users.setUserEnabled(contextId, userId, enabled, zapApiKey, function(err, resp) {
                     setUserEnabledDone(state.error);
                 });
@@ -218,8 +218,8 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
                     "bankAcc=seleniumBankAcc&bankRouting=0198212#&address=seleniumAddress&_csrf=&submit=",
                     zapApiKey,
                     function(err, resp) {
-                        var statusValue;
-                        var zapError;
+                        const statusValue;
+                        const zapError;
 
                         scanId = resp.scan;
 
@@ -258,8 +258,8 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
                                 status();
                                 console.log("About to write report.");
                                 zaproxy.core.htmlreport(zapApiKey, function(err, resp) {
-                                    var date = new Date();
-                                    var reportPath = __dirname +
+                                    const date = new Date();
+                                    const reportPath = __dirname +
                                         "/report_" +
                                         date.getFullYear() +
                                         "-" +
