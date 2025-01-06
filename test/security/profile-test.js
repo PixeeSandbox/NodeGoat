@@ -135,7 +135,7 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
             },
             function includeInZapContext(includeInZapContextDone) {
                 // Inform Zap how to authenticate itself.
-                zaproxy.context.includeInContext("Default Context", "\\Q" + zapTargetApp + "\E.*", zapApiKey,
+                zaproxy.context.includeInContext("Default Context", "\\Q" + zapTargetApp + "E.*", zapApiKey,
                     function(err, resp) {
                         includeInZapContextDone(state.error);
                     }
@@ -161,7 +161,7 @@ test.describe(zapTargetAppRoute + " regression test suite", function() {
                 // contextId, loggedInIndicatorRegex
                 zaproxy.authentication.setLoggedInIndicator(
                     contextId,
-                    "\Q<p>Moved Temporarily. Redirecting to <a href='/dashboard'>/dashboard</a></p>\E",
+                    "Q<p>Moved Temporarily. Redirecting to <a href='/dashboard'>/dashboard</a></p>E",
                     zapApiKey,
                     function(err, resp) {
                         setLoggedInIndicatorDone(state.error);
